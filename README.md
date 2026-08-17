@@ -4,7 +4,7 @@ A real-time patient intake form and staff monitoring dashboard. Built for the Ag
 
 ## Tech stack
 
-Next.js (App Router), TypeScript, TailwindCSS, Socket.IO (self-managed WebSocket server via a custom Next.js server), react-hook-form + zod, Vitest.
+Next.js (App Router), TypeScript, TailwindCSS, Socket.IO (self-managed WebSocket server via a custom Next.js server), react-hook-form + zod, `next-themes` (light/dark mode) + `lucide-react` (icons), Vitest.
 
 ## Quick start
 
@@ -26,7 +26,7 @@ npm run lint
 
 Deployed on Render (Web Service, native Node buildpack — see `render.yaml`), not Vercel/Netlify: the app runs a self-managed Socket.IO server on a custom Next.js server (`server.ts`), which needs a long-lived Node process holding WebSocket connections open — something Vercel/Netlify's serverless functions can't do. Render's free tier spins the service down after ~15 minutes of inactivity, so the first request after a period of idleness has a cold-start delay of roughly 30–50 seconds.
 
-Live URL: _TODO — fill in once deployed_
+Live URL: https://agnos-frontend.onrender.com
 
 ## How it works
 

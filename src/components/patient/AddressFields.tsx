@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import type { FieldErrors, UseFormRegister, UseFormSetValue, UseFormWatch } from "react-hook-form";
 import { TextField } from "@/components/ui/TextField";
+import { FormSection } from "@/components/ui/FormSection";
 import type { PatientFormValues } from "@/lib/validation/patient-form";
 import { THAI_ADDRESS_DATA, type ThaiAddressRow } from "@/lib/data/thai-address";
 
@@ -53,20 +54,23 @@ export function AddressFields({ register, setValue, watch, errors, onFieldChange
   }
 
   return (
-    <fieldset className="flex flex-col gap-3">
-      <legend className="font-medium text-slate-800">Address</legend>
-      <TextField
-        label="House No. / Street"
-        error={errors.address?.houseNoStreet?.message}
-        {...register("address.houseNoStreet", { onChange: onFieldChange })}
-      />
+    <FormSection title="Address">
+      <div className="sm:col-span-2">
+        <TextField
+          label="House No. / Street"
+          error={errors.address?.houseNoStreet?.message}
+          {...register("address.houseNoStreet", { onChange: onFieldChange })}
+        />
+      </div>
 
-      <div className="relative flex flex-col gap-1 text-sm">
-        <span className="font-medium text-slate-700">Sub-district (Tambon)</span>
+      <div className="relative flex flex-col gap-1.5 text-sm">
+        <span className="font-medium text-foreground">Sub-district (Tambon)</span>
         <input
           type="text"
-          className={`rounded border px-3 py-2 ${
-            errors.address?.subDistrict ? "border-red-500" : "border-slate-300"
+          className={`rounded-lg border bg-surface px-3 py-2 text-foreground outline-none transition-colors ${
+            errors.address?.subDistrict
+              ? "border-danger-fg focus:ring-2 focus:ring-danger-fg/40"
+              : "border-border focus:border-ring focus:ring-2 focus:ring-ring/30"
           }`}
           value={subDistrict}
           placeholder="พิมพ์ชื่อตำบล..."
@@ -75,15 +79,15 @@ export function AddressFields({ register, setValue, watch, errors, onFieldChange
           onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
         />
         {errors.address?.subDistrict && (
-          <span className="text-xs text-red-600">{errors.address.subDistrict.message}</span>
+          <span className="text-xs text-danger-fg">{errors.address.subDistrict.message}</span>
         )}
         {showSuggestions && suggestions.length > 0 && (
-          <ul className="absolute top-full z-10 mt-1 max-h-56 w-full overflow-y-auto rounded border border-slate-300 bg-white shadow-lg">
+          <ul className="absolute top-full z-10 mt-1 max-h-56 w-full overflow-y-auto rounded-lg border border-border bg-surface shadow-lg">
             {suggestions.map((row, i) => (
               <li key={`${row.subdistrict}-${row.district}-${row.zipcode}-${i}`}>
                 <button
                   type="button"
-                  className="block w-full px-3 py-2 text-left text-sm hover:bg-slate-100"
+                  className="block w-full px-3 py-2 text-left text-sm text-foreground hover:bg-surface-muted"
                   onMouseDown={(e) => e.preventDefault()}
                   onClick={() => selectSuggestion(row)}
                 >
@@ -95,26 +99,9 @@ export function AddressFields({ register, setValue, watch, errors, onFieldChange
         )}
       </div>
 
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-        <TextField
-          label="District (Amphoe)"
-          value={district}
-          readOnly
-          error={errors.address?.district?.message}
-        />
-        <TextField
-          label="Province (Changwat)"
-          value={province}
-          readOnly
-          error={errors.address?.province?.message}
-        />
-        <TextField
-          label="Postal Code"
-          value={postalCode}
-          readOnly
-          error={errors.address?.postalCode?.message}
-        />
-      </div>
-    </fieldset>
+      <TextField label="District (Amphoe)" value={district} readOnly error={errors.address?.district?.message} />
+      <TextField label="Province (Changwat)" value={province} readOnly error={errors.address?.province?.message} />
+      <TextField label="Postal Code" value={postalCode} readOnly error={errors.address?.postalCode?.message} />
+    </FormSection>
   );
 }

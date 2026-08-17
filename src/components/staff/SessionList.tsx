@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { Search } from "lucide-react";
 import type { SessionState, SessionStatus } from "@/types/session";
 import { SessionCard } from "./SessionCard";
 
@@ -29,21 +30,26 @@ export function SessionList({ sessions, selectedId, onSelect }: SessionListProps
   return (
     <div className="flex h-full flex-col gap-3">
       <div className="flex flex-col gap-2">
-        <input
-          type="search"
-          placeholder="Search by name..."
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          className="rounded border border-slate-300 px-3 py-2 text-sm"
-        />
-        <div className="flex flex-wrap gap-1">
+        <div className="relative">
+          <Search className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <input
+            type="search"
+            placeholder="Search by name..."
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            className="w-full rounded-lg border border-border bg-surface py-2 pr-3 pl-9 text-sm text-foreground outline-none transition-colors focus:border-ring focus:ring-2 focus:ring-ring/30"
+          />
+        </div>
+        <div className="flex flex-wrap gap-1.5">
           {STATUS_FILTERS.map((filter) => (
             <button
               key={filter}
               type="button"
               onClick={() => setStatusFilter(filter)}
-              className={`rounded px-2 py-1 text-xs capitalize ${
-                statusFilter === filter ? "bg-slate-800 text-white" : "bg-slate-100 text-slate-600"
+              className={`rounded-full px-2.5 py-1 text-xs font-medium capitalize transition-colors ${
+                statusFilter === filter
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-surface-muted text-muted-foreground hover:text-foreground"
               }`}
             >
               {filter}
@@ -52,7 +58,7 @@ export function SessionList({ sessions, selectedId, onSelect }: SessionListProps
         </div>
       </div>
       <div className="flex flex-col gap-2 overflow-y-auto">
-        {filtered.length === 0 && <p className="text-sm text-slate-400">No sessions.</p>}
+        {filtered.length === 0 && <p className="px-1 text-sm text-muted-foreground">No sessions.</p>}
         {filtered.map((session) => (
           <SessionCard
             key={session.sessionId}

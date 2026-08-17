@@ -11,13 +11,17 @@ interface SelectFieldProps extends SelectHTMLAttributes<HTMLSelectElement> {
 export const SelectField = forwardRef<HTMLSelectElement, SelectFieldProps>(
   ({ label, error, optional, options, placeholder, className, ...props }, ref) => {
     return (
-      <label className="flex flex-col gap-1 text-sm">
-        <span className="font-medium text-slate-700">
-          {label} {optional && <span className="font-normal text-slate-400">(optional)</span>}
+      <label className="flex flex-col gap-1.5 text-sm">
+        <span className="font-medium text-foreground">
+          {label} {optional && <span className="font-normal text-muted-foreground">(optional)</span>}
         </span>
         <select
           ref={ref}
-          className={`rounded border bg-white px-3 py-2 ${error ? "border-red-500" : "border-slate-300"} ${className ?? ""}`}
+          className={`rounded-lg border bg-surface px-3 py-2 text-foreground outline-none transition-colors ${
+            error
+              ? "border-danger-fg focus:ring-2 focus:ring-danger-fg/40"
+              : "border-border focus:border-ring focus:ring-2 focus:ring-ring/30"
+          } ${className ?? ""}`}
           {...props}
         >
           <option value="">{placeholder ?? "Select..."}</option>
@@ -27,7 +31,7 @@ export const SelectField = forwardRef<HTMLSelectElement, SelectFieldProps>(
             </option>
           ))}
         </select>
-        {error && <span className="text-xs text-red-600">{error}</span>}
+        {error && <span className="text-xs text-danger-fg">{error}</span>}
       </label>
     );
   }

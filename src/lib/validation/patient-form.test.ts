@@ -78,6 +78,16 @@ describe("patientFormSchema", () => {
     expect(result.success).toBe(false);
   });
 
+  it("accepts an empty religion as not provided (what react-hook-form sends for an untouched optional select)", () => {
+    const result = patientFormSchema.safeParse({ ...validData, religion: "" });
+    expect(result.success).toBe(true);
+  });
+
+  it("rejects an unknown religion option", () => {
+    const result = patientFormSchema.safeParse({ ...validData, religion: "NotAReligion" });
+    expect(result.success).toBe(false);
+  });
+
   it("accepts an emergency contact when both name and relationship are present", () => {
     const result = patientFormSchema.safeParse({
       ...validData,
@@ -92,5 +102,13 @@ describe("patientFormSchema", () => {
       emergencyContact: { name: "Somsri" },
     });
     expect(result.success).toBe(false);
+  });
+
+  it("accepts a fully-empty emergency contact as not provided (what react-hook-form actually sends for an untouched optional section)", () => {
+    const result = patientFormSchema.safeParse({
+      ...validData,
+      emergencyContact: { name: "", relationship: "" },
+    });
+    expect(result.success).toBe(true);
   });
 });

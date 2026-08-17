@@ -14,15 +14,17 @@ export function SessionCard({ session, selected, onSelect }: SessionCardProps) {
     <button
       type="button"
       onClick={onSelect}
-      className={`flex w-full flex-col gap-1 rounded border px-3 py-2 text-left ${
-        selected ? "border-blue-500 bg-blue-50" : "border-slate-200 bg-white hover:bg-slate-50"
+      className={`flex w-full flex-col gap-1.5 rounded-xl border px-3.5 py-3 text-left transition-colors ${
+        selected
+          ? "border-primary/40 bg-primary/5 ring-1 ring-primary/30"
+          : "border-border bg-surface hover:bg-surface-muted"
       }`}
     >
       <div className="flex items-center justify-between gap-2">
-        <span className="truncate font-medium text-slate-900">{name}</span>
+        <span className="truncate font-medium text-foreground">{name}</span>
         <StatusBadge status={session.status} />
       </div>
-      <span className="text-xs text-slate-400">Session {session.sessionId.slice(0, 8)}</span>
+      <span className="text-xs text-muted-foreground">Session {session.sessionId.slice(0, 8)}</span>
     </button>
   );
 }

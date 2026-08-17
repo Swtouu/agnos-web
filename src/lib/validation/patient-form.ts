@@ -34,10 +34,28 @@ export const addressSchema = z.object({
   postalCode: z.string().regex(THAI_POSTAL_CODE_REGEX, "Postal code must be 5 digits"),
 });
 
-export const emergencyContactSchema = z.object({
-  name: z.string().min(1, "Emergency contact name is required"),
-  relationship: z.enum(RELATIONSHIP_OPTIONS),
-});
+// Both fields are individually optional here — react-hook-form always sends
+// { name: "", relationship: "" } for an untouched section (never undefined),
+// so "required" checks live in superRefine: fully empty passes (not provided),
+// partially filled prompts to complete it.
+export const emergencyContactSchema = z
+  .object({
+    name: z.string().optional(),
+    relationship: z.string().optional(),
+  })
+  .superRefine((val, ctx) => {
+    const hasName = Boolean(val.name?.trim());
+    const hasRelationship = Boolean(val.relationship);
+    if (!hasName && !hasRelationship) return;
+    if (!hasName) {
+      ctx.addIssue({ code: "custom", path: ["name"], message: "Emergency contact name is required" });
+    }
+    if (!hasRelationship) {
+      ctx.addIssue({ code: "custom", path: ["relationship"], message: "Relationship is required" });
+    } else if (!(RELATIONSHIP_OPTIONS as readonly string[]).includes(val.relationship as string)) {
+      ctx.addIssue({ code: "custom", path: ["relationship"], message: "Select a valid relationship" });
+    }
+  });
 
 export const patientFormSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
@@ -51,7 +69,10 @@ export const patientFormSchema = z.object({
   preferredLanguage: z.enum(PREFERRED_LANGUAGE_OPTIONS),
   nationality: z.string().min(1, "Nationality is required"),
   emergencyContact: emergencyContactSchema.optional(),
-  religion: z.enum(RELIGION_OPTIONS).optional(),
+  // react-hook-form sends "" for an untouched <select>, never undefined — same root cause
+  // as the emergencyContact fix above. A union (not preprocess/transform) keeps input and
+  // output types symmetric, which zodResolver needs to match against useForm<PatientFormValues>.
+  religion: z.union([z.enum(RELIGION_OPTIONS), z.literal("")]).optional(),
 });
 
 export type PatientFormValues = z.infer<typeof patientFormSchema>;
