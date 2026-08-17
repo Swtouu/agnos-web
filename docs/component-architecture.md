@@ -1,0 +1,20 @@
+# Component Architecture
+
+## Patient side
+
+- **`PatientForm`** — owns the `react-hook-form` instance (`zodResolver(patientFormSchema)`), the session id (via `useSessionId`), and the socket connection (via `usePatientSession`). It wires every field's `onChange` to a single `syncField(field)` helper that reads the field's current value with `getValues(field)` and hands it to `emitFieldUpdate`. This works uniformly for both flat fields (`firstName`) and nested objects (`address`, `emergencyContact`) — for a nested field, `getValues("address")` returns the whole sub-object after RHF has already applied the change internally, so one helper covers both cases without a dot-path parser.
+- **`AddressFields`**, **`EmergencyContactFields`** — receive `register`/`errors` (and, for `AddressFields`, `setValue`/`watch`) as props rather than reading form context, since the form is small enough that prop-passing is simpler than `FormProvider`/`useFormContext`.
+- **`ReconnectBanner`** — pure presentational, driven by the `connected` boolean from `usePatientSession`.
+
+## Staff side
+
+- **`StaffPage`** — holds `selectedSessionId` as local state; everything else (list vs. detail, mobile vs. desktop) is a CSS/Tailwind concern layered on top of that one piece of state.
+- **`useStaffSessions`** — the data source: joins the `staff` room, receives a full snapshot on connect, then merges incremental `session-update` events into a `Record<sessionId, SessionState>`. Returned as an array sorted by creation time.
+- **`SessionList`** — owns its own search/filter local state (bonus feature) and derives the filtered list with `useMemo`.
+- **`SessionCard`** / **`StatusBadge`** — presentational only.
+- **`SessionDetail`** — presentational; renders whatever fields are present on the selected `SessionState["data"]` (a `Partial<PatientFormData>`, since a session may be mid-fill).
+
+## Shared boundary
+
+- **`src/types/session.ts`** — the socket event contract (`ClientToServerEvents`, `ServerToClientEvents`) and `SessionState`/`PatientFormData` types, imported by both `server.ts` and the client hooks. This is the one place patient and staff code genuinely depend on the same shape.
+- **`src/lib/validation/patient-form.ts`** — the zod schema is the source of truth for `PatientFormData`'s type (`z.infer`), for the client-side RHF resolver, and for server-side validation at submit time (`server.ts` calls `patientFormSchema.safeParse` before accepting a submission).
