@@ -6,13 +6,13 @@
 
 ## Session identity
 
-A patient's session id is generated client-side (`crypto.randomUUID()`) and pushed into the URL (`/patient?session=<id>`) on first load. A refresh reads the id back out of the URL instead of generating a new one, so the patient rejoins the same Socket.IO room and the staff dashboard doesn't see a duplicate session appear.
+A patient's session id is generated client-side (`crypto.randomUUID()`) and pushed into the URL (`/patient?session=<id>`) on first load. A refresh reads the id back out of the URL instead of generating a new one, so the patient resumes the same session and the staff dashboard doesn't see a duplicate one appear.
 
 ## Event contract (`src/types/session.ts`)
 
 | Event | Direction | Purpose |
 |---|---|---|
-| `join-session` | patient → server | Joins the room named by the session id. |
+| `join-session` | patient → server | Ensures the session exists server-side and broadcasts it to staff immediately, so a session appears on the dashboard the moment the form loads, before the patient types anything. |
 | `join-staff` | staff → server | Joins the `staff` room and triggers a `session-snapshot` reply. |
 | `field-update` | patient → server | One top-level field (`{ sessionId, field, value }`) changed. Debounced 300ms client-side per field. |
 | `submit` | patient → server (with ack) | Final, validated submission. Server re-validates with the same zod schema before accepting. |

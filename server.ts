@@ -28,7 +28,6 @@ app.prepare().then(() => {
 
   io.on("connection", (socket) => {
     socket.on("join-session", (sessionId: string) => {
-      socket.join(sessionId);
       const session = getOrCreateSession(sessionId);
       io.to(STAFF_ROOM).emit("session-update", session);
     });
