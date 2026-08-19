@@ -1,4 +1,5 @@
 import { forwardRef, type SelectHTMLAttributes } from "react";
+import { useTranslations } from "@/lib/i18n/LocaleProvider";
 
 interface SelectFieldProps extends SelectHTMLAttributes<HTMLSelectElement> {
   label: string;
@@ -6,14 +7,17 @@ interface SelectFieldProps extends SelectHTMLAttributes<HTMLSelectElement> {
   optional?: boolean;
   options: readonly string[];
   placeholder?: string;
+  // Options are stored/validated as stable English values — this only translates the displayed label.
+  getOptionLabel?: (value: string) => string;
 }
 
 export const SelectField = forwardRef<HTMLSelectElement, SelectFieldProps>(
-  ({ label, error, optional, options, placeholder, className, ...props }, ref) => {
+  ({ label, error, optional, options, placeholder, getOptionLabel, className, ...props }, ref) => {
+    const t = useTranslations();
     return (
       <label className="flex flex-col gap-1.5 text-sm">
         <span className="font-medium text-foreground">
-          {label} {optional && <span className="font-normal text-muted-foreground">(optional)</span>}
+          {label} {optional && <span className="font-normal text-muted-foreground">{t("patientForm.optional")}</span>}
         </span>
         <select
           ref={ref}
@@ -24,14 +28,14 @@ export const SelectField = forwardRef<HTMLSelectElement, SelectFieldProps>(
           } ${className ?? ""}`}
           {...props}
         >
-          <option value="">{placeholder ?? "Select..."}</option>
+          <option value="">{placeholder ?? t("patientForm.selectPlaceholder")}</option>
           {options.map((option) => (
             <option key={option} value={option}>
-              {option}
+              {getOptionLabel ? getOptionLabel(option) : option}
             </option>
           ))}
         </select>
-        {error && <span className="text-xs text-danger-fg">{error}</span>}
+        {error && <span className="text-xs text-danger-fg">{t(error)}</span>}
       </label>
     );
   }

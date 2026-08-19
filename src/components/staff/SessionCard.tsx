@@ -1,5 +1,8 @@
+"use client";
+
 import type { SessionState } from "@/types/session";
 import { StatusBadge } from "./StatusBadge";
+import { useTranslations } from "@/lib/i18n/LocaleProvider";
 
 interface SessionCardProps {
   session: SessionState;
@@ -8,7 +11,8 @@ interface SessionCardProps {
 }
 
 export function SessionCard({ session, selected, onSelect }: SessionCardProps) {
-  const name = [session.data.firstName, session.data.lastName].filter(Boolean).join(" ") || "Unnamed patient";
+  const t = useTranslations();
+  const name = [session.data.firstName, session.data.lastName].filter(Boolean).join(" ") || t("staff.unnamedPatient");
 
   return (
     <button
@@ -24,7 +28,9 @@ export function SessionCard({ session, selected, onSelect }: SessionCardProps) {
         <span className="truncate font-medium text-foreground">{name}</span>
         <StatusBadge status={session.status} />
       </div>
-      <span className="text-xs text-muted-foreground">Session {session.sessionId.slice(0, 8)}</span>
+      <span className="text-xs text-muted-foreground">
+        {t("staff.sessionPrefix")} {session.sessionId.slice(0, 8)}
+      </span>
     </button>
   );
 }

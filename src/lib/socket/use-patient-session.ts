@@ -52,7 +52,7 @@ export function usePatientSession(sessionId: string) {
         const timeout = setTimeout(() => {
           if (settled) return;
           settled = true;
-          resolve({ ok: false, error: "Submission timed out — check your connection and try again" });
+          resolve({ ok: false, error: "patientForm.submitTimeout" });
         }, SUBMIT_TIMEOUT_MS);
         getSocket().emit("submit", { sessionId, data }, (ack: SubmitAck) => {
           if (settled) return;

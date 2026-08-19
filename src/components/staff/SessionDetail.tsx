@@ -1,6 +1,10 @@
+"use client";
+
 import { ArrowLeft } from "lucide-react";
+import type { ReactNode } from "react";
 import type { SessionState } from "@/types/session";
 import { StatusBadge } from "./StatusBadge";
+import { useTranslations, useOptionLabel } from "@/lib/i18n/LocaleProvider";
 
 function Field({ label, value }: { label: string; value?: string }) {
   return (
@@ -11,7 +15,7 @@ function Field({ label, value }: { label: string; value?: string }) {
   );
 }
 
-function Group({ title, children }: { title?: string; children: React.ReactNode }) {
+function Group({ title, children }: { title?: string; children: ReactNode }) {
   return (
     <div className="flex flex-col gap-3 rounded-2xl border border-border bg-surface p-5 shadow-sm">
       {title && <h3 className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">{title}</h3>}
@@ -26,8 +30,10 @@ interface SessionDetailProps {
 }
 
 export function SessionDetail({ session, onBack }: SessionDetailProps) {
+  const t = useTranslations();
+  const getOptionLabel = useOptionLabel();
   const d = session.data;
-  const name = [d.firstName, d.lastName].filter(Boolean).join(" ") || "Unnamed patient";
+  const name = [d.firstName, d.lastName].filter(Boolean).join(" ") || t("staff.unnamedPatient");
 
   return (
     <div className="flex flex-col gap-4 p-4 sm:p-6">
@@ -39,7 +45,7 @@ export function SessionDetail({ session, onBack }: SessionDetailProps) {
             className="inline-flex items-center gap-1 text-sm font-medium text-primary sm:hidden"
           >
             <ArrowLeft className="h-4 w-4" />
-            Back
+            {t("staff.back")}
           </button>
         )}
         <h2 className="hidden text-lg font-semibold text-foreground sm:block">{name}</h2>
@@ -47,32 +53,40 @@ export function SessionDetail({ session, onBack }: SessionDetailProps) {
       </div>
 
       <Group>
-        <Field label="First Name" value={d.firstName} />
-        <Field label="Middle Name" value={d.middleName} />
-        <Field label="Last Name" value={d.lastName} />
-        <Field label="Date of Birth" value={d.dateOfBirth} />
-        <Field label="Gender" value={d.gender} />
-        <Field label="Nationality" value={d.nationality} />
-        <Field label="Preferred Language" value={d.preferredLanguage} />
-        <Field label="Religion" value={d.religion} />
-        <Field label="Phone Number" value={d.phoneNumber} />
-        <Field label="Email" value={d.email} />
+        <Field label={t("patientForm.fields.firstName")} value={d.firstName} />
+        <Field label={t("patientForm.fields.middleName")} value={d.middleName} />
+        <Field label={t("patientForm.fields.lastName")} value={d.lastName} />
+        <Field label={t("patientForm.fields.dateOfBirth")} value={d.dateOfBirth} />
+        <Field label={t("patientForm.fields.gender")} value={d.gender && getOptionLabel("gender", d.gender)} />
+        <Field label={t("patientForm.fields.nationality")} value={d.nationality} />
+        <Field
+          label={t("patientForm.fields.preferredLanguage")}
+          value={d.preferredLanguage && getOptionLabel("preferredLanguage", d.preferredLanguage)}
+        />
+        <Field label={t("patientForm.fields.religion")} value={d.religion && getOptionLabel("religion", d.religion)} />
+        <Field label={t("patientForm.fields.phoneNumber")} value={d.phoneNumber} />
+        <Field label={t("patientForm.fields.email")} value={d.email} />
       </Group>
 
       {d.address && (
-        <Group title="Address">
-          <Field label="House No. / Street" value={d.address.houseNoStreet} />
-          <Field label="Sub-district" value={d.address.subDistrict} />
-          <Field label="District" value={d.address.district} />
-          <Field label="Province" value={d.address.province} />
-          <Field label="Postal Code" value={d.address.postalCode} />
+        <Group title={t("staff.addressSection")}>
+          <Field label={t("patientForm.fields.houseNoStreet")} value={d.address.houseNoStreet} />
+          <Field label={t("patientForm.fields.subDistrict")} value={d.address.subDistrict} />
+          <Field label={t("patientForm.fields.district")} value={d.address.district} />
+          <Field label={t("patientForm.fields.province")} value={d.address.province} />
+          <Field label={t("patientForm.fields.postalCode")} value={d.address.postalCode} />
         </Group>
       )}
 
       {d.emergencyContact && (
-        <Group title="Emergency Contact">
-          <Field label="Name" value={d.emergencyContact.name} />
-          <Field label="Relationship" value={d.emergencyContact.relationship} />
+        <Group title={t("staff.emergencyContactSection")}>
+          <Field label={t("patientForm.fields.emergencyContactName")} value={d.emergencyContact.name} />
+          <Field
+            label={t("patientForm.fields.emergencyContactRelationship")}
+            value={
+              d.emergencyContact.relationship && getOptionLabel("relationship", d.emergencyContact.relationship)
+            }
+          />
         </Group>
       )}
     </div>

@@ -1,5 +1,8 @@
+"use client";
+
 import { CheckCircle2, MinusCircle, PenLine } from "lucide-react";
 import type { SessionStatus } from "@/types/session";
+import { useTranslations } from "@/lib/i18n/LocaleProvider";
 
 const STATUS_STYLES: Record<SessionStatus, string> = {
   active: "bg-success-bg text-success-fg",
@@ -7,10 +10,10 @@ const STATUS_STYLES: Record<SessionStatus, string> = {
   submitted: "bg-info-bg text-info-fg",
 };
 
-const STATUS_LABELS: Record<SessionStatus, string> = {
-  active: "Actively filling in",
-  inactive: "Inactive",
-  submitted: "Submitted",
+const STATUS_LABEL_KEYS: Record<SessionStatus, string> = {
+  active: "staff.statusActive",
+  inactive: "staff.statusInactive",
+  submitted: "staff.statusSubmitted",
 };
 
 const STATUS_ICONS: Record<SessionStatus, typeof PenLine> = {
@@ -20,13 +23,14 @@ const STATUS_ICONS: Record<SessionStatus, typeof PenLine> = {
 };
 
 export function StatusBadge({ status }: { status: SessionStatus }) {
+  const t = useTranslations();
   const Icon = STATUS_ICONS[status];
   return (
     <span
       className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium whitespace-nowrap ${STATUS_STYLES[status]}`}
     >
       <Icon className="h-3 w-3" />
-      {STATUS_LABELS[status]}
+      {t(STATUS_LABEL_KEYS[status])}
     </span>
   );
 }

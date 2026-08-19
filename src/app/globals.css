@@ -2,17 +2,18 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* Brand colors sourced from agnoshealth.com/join-our-team's actual CSS, not a generic palette. */
 :root {
-  --background: #f8fafc;
-  --foreground: #0f172a;
+  --background: #fcfafa;
+  --foreground: #1a202c;
   --surface: #ffffff;
   --surface-muted: #f1f5f9;
   --border: #e2e8f0;
   --muted-foreground: #64748b;
-  --primary: #4f46e5;
+  --primary: #1a59c2;
   --primary-foreground: #ffffff;
-  --primary-hover: #4338ca;
-  --ring: #6366f1;
+  --primary-hover: #14478f;
+  --ring: #1a59c2;
   --success-bg: #dcfce7;
   --success-fg: #166534;
   --warning-bg: #fef3c7;
@@ -24,16 +25,16 @@
 }
 
 .dark {
-  --background: #090e1a;
-  --foreground: #e2e8f0;
-  --surface: #111827;
+  --background: #0d1117;
+  --foreground: #e5e7eb;
+  --surface: #171b22;
   --surface-muted: #1e293b;
-  --border: #1f2937;
+  --border: #232830;
   --muted-foreground: #94a3b8;
-  --primary: #6366f1;
+  --primary: #4c8de0;
   --primary-foreground: #ffffff;
-  --primary-hover: #818cf8;
-  --ring: #818cf8;
+  --primary-hover: #79acea;
+  --ring: #4c8de0;
   --success-bg: rgba(34, 197, 94, 0.15);
   --success-fg: #4ade80;
   --warning-bg: rgba(245, 158, 11, 0.15);
@@ -63,7 +64,7 @@
   --color-info-fg: var(--info-fg);
   --color-danger-bg: var(--danger-bg);
   --color-danger-fg: var(--danger-fg);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-athiti);
   --font-mono: var(--font-geist-mono);
 }
 

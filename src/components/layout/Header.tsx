@@ -1,18 +1,27 @@
+"use client";
+
 import Link from "next/link";
 import { Activity } from "lucide-react";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
+import { LocaleToggle } from "@/components/layout/LocaleToggle";
+import { useTranslations } from "@/lib/i18n/LocaleProvider";
 
 export function Header() {
+  const t = useTranslations();
+
   return (
     <header className="border-b border-border bg-surface/80 backdrop-blur">
       <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-4">
         <Link href="/" className="flex items-center gap-2 font-semibold text-foreground">
-          <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+          <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground">
             <Activity className="h-4 w-4" />
           </span>
-          Agnos Patient Intake
+          <span className="hidden sm:inline">{t("brand")}</span>
         </Link>
-        <ThemeToggle />
+        <div className="flex items-center gap-2">
+          <LocaleToggle />
+          <ThemeToggle />
+        </div>
       </div>
     </header>
   );

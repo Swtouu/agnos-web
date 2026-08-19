@@ -1,6 +1,10 @@
+"use client";
+
 import { WifiOff } from "lucide-react";
+import { useTranslations } from "@/lib/i18n/LocaleProvider";
 
 export function ReconnectBanner({ connected }: { connected: boolean }) {
+  const t = useTranslations();
   if (connected) return null;
   return (
     <div
@@ -8,7 +12,7 @@ export function ReconnectBanner({ connected }: { connected: boolean }) {
       role="status"
     >
       <WifiOff className="h-4 w-4 shrink-0" />
-      Reconnecting... your changes will sync once the connection is back.
+      {t("patientForm.reconnecting")}
     </div>
   );
 }

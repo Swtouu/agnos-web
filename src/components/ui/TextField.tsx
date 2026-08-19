@@ -1,4 +1,5 @@
 import { forwardRef, type InputHTMLAttributes } from "react";
+import { useTranslations } from "@/lib/i18n/LocaleProvider";
 
 interface TextFieldProps extends InputHTMLAttributes<HTMLInputElement> {
   label: string;
@@ -8,10 +9,11 @@ interface TextFieldProps extends InputHTMLAttributes<HTMLInputElement> {
 
 export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
   ({ label, error, optional, className, readOnly, ...props }, ref) => {
+    const t = useTranslations();
     return (
       <label className="flex flex-col gap-1.5 text-sm">
         <span className="font-medium text-foreground">
-          {label} {optional && <span className="font-normal text-muted-foreground">(optional)</span>}
+          {label} {optional && <span className="font-normal text-muted-foreground">{t("patientForm.optional")}</span>}
         </span>
         <input
           ref={ref}
@@ -25,7 +27,7 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
           } ${className ?? ""}`}
           {...props}
         />
-        {error && <span className="text-xs text-danger-fg">{error}</span>}
+        {error && <span className="text-xs text-danger-fg">{t(error)}</span>}
       </label>
     );
   }

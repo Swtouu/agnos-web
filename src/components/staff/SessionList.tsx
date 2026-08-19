@@ -4,8 +4,15 @@ import { useMemo, useState } from "react";
 import { Search } from "lucide-react";
 import type { SessionState, SessionStatus } from "@/types/session";
 import { SessionCard } from "./SessionCard";
+import { useTranslations } from "@/lib/i18n/LocaleProvider";
 
 const STATUS_FILTERS: Array<"all" | SessionStatus> = ["all", "active", "inactive", "submitted"];
+const FILTER_LABEL_KEYS: Record<"all" | SessionStatus, string> = {
+  all: "staff.filterAll",
+  active: "staff.filterActive",
+  inactive: "staff.filterInactive",
+  submitted: "staff.filterSubmitted",
+};
 
 interface SessionListProps {
   sessions: SessionState[];
@@ -14,6 +21,7 @@ interface SessionListProps {
 }
 
 export function SessionList({ sessions, selectedId, onSelect }: SessionListProps) {
+  const t = useTranslations();
   const [query, setQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<"all" | SessionStatus>("all");
 
@@ -34,7 +42,7 @@ export function SessionList({ sessions, selectedId, onSelect }: SessionListProps
           <Search className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <input
             type="search"
-            placeholder="Search by name..."
+            placeholder={t("staff.searchPlaceholder")}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             className="w-full rounded-lg border border-border bg-surface py-2 pr-3 pl-9 text-sm text-foreground outline-none transition-colors focus:border-ring focus:ring-2 focus:ring-ring/30"
@@ -52,13 +60,13 @@ export function SessionList({ sessions, selectedId, onSelect }: SessionListProps
                   : "bg-surface-muted text-muted-foreground hover:text-foreground"
               }`}
             >
-              {filter}
+              {t(FILTER_LABEL_KEYS[filter])}
             </button>
           ))}
         </div>
       </div>
       <div className="flex flex-col gap-2 overflow-y-auto">
-        {filtered.length === 0 && <p className="px-1 text-sm text-muted-foreground">No sessions.</p>}
+        {filtered.length === 0 && <p className="px-1 text-sm text-muted-foreground">{t("staff.noSessions")}</p>}
         {filtered.map((session) => (
           <SessionCard
             key={session.sessionId}
