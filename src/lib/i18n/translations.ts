@@ -42,23 +42,23 @@ const dict = {
   },
 
   landing: {
-    badge: { en: "Real-time patient intake", th: "รับข้อมูลผู้ป่วยแบบเรียลไทม์" },
-    heading: { en: "Patient forms, synced live to your front desk.", th: "ฟอร์มผู้ป่วย ซิงก์ถึงเคาน์เตอร์แบบเรียลไทม์" },
+    badge: { en: "Patient Intake", th: "ระบบบันทึกข้อมูลผู้ป่วย" },
+    heading: { en: "A simple patient intake form.", th: "แบบฟอร์มรับข้อมูลผู้ป่วย" },
     subheading: {
-      en: "Patients fill in their details on any device. Staff watch it happen in real time, no refresh, no waiting.",
-      th: "ผู้ป่วยกรอกข้อมูลจากอุปกรณ์ใดก็ได้ เจ้าหน้าที่เห็นข้อมูลทันทีแบบเรียลไทม์ ไม่ต้องรีเฟรช ไม่ต้องรอ",
+      en: "Patients fill in their details on any device. Staff can view the information from the front desk.",
+      th: "ผู้ป่วยกรอกข้อมูลจากอุปกรณ์ใดก็ได้ เจ้าหน้าที่สามารถดูข้อมูลได้จากเคาน์เตอร์",
     },
     patientCardTitle: { en: "I'm a patient", th: "ฉันเป็นผู้ป่วย" },
     patientCardDesc: { en: "Fill in your intake form", th: "กรอกแบบฟอร์มข้อมูลผู้ป่วย" },
     patientCardAction: { en: "Start", th: "เริ่มกรอกข้อมูล" },
     staffCardTitle: { en: "I'm staff", th: "ฉันเป็นเจ้าหน้าที่" },
-    staffCardDesc: { en: "Monitor patients live", th: "ติดตามข้อมูลผู้ป่วยแบบเรียลไทม์" },
+    staffCardDesc: { en: "View patient information", th: "ดูข้อมูลผู้ป่วย" },
     staffCardAction: { en: "Open dashboard", th: "เปิดแดชบอร์ด" },
   },
 
   patientForm: {
     title: { en: "Patient Intake Form", th: "แบบฟอร์มข้อมูลผู้ป่วย" },
-    subtitle: { en: "Your answers sync to the front desk as you type.", th: "คำตอบของคุณจะซิงก์ถึงเคาน์เตอร์ทันทีขณะพิมพ์" },
+    subtitle: { en: "Please fill in your information below.", th: "กรุณากรอกข้อมูลของท่านด้านล่าง" },
     reconnecting: {
       en: "Reconnecting... your changes will sync once the connection is back.",
       th: "กำลังเชื่อมต่อใหม่... การเปลี่ยนแปลงจะซิงก์เมื่อเชื่อมต่อสำเร็จ",
